@@ -7,6 +7,43 @@ server:
     key-store-password: 123456
     key-alias: selfsign
 
+my:
+  gateway:
+    whitelist:
+      - /api/auth/login
+      - /api/auth/logout
+
 spring:
   application:
     name: gateway-server
+  security:
+    jwt:
+      key:
+        abcdefg
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
+        enabled: true
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        namespace: public
+        refresh-enabled: true
+    gateway:
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
+      routes:
+        - id: auth-server
+          uri: lb://auth-server   # 认证服务的服务名
+          predicates:
+            - Path=/api/auth/**     # 匹配 /api/auth/** 的所有请求

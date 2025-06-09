@@ -95,6 +95,7 @@ public class SecurityConfiguration {
         response.setContentType("application/json;charset=utf-8");//返回值的字符编码
         PrintWriter writer = response.getWriter();
         User user=(User) authentication.getPrincipal(); //获取登录的用户信息
+        System.out.println(user.getUsername());
         Account account = accountService.findAccountByUsernameToEmail(user.getUsername());
 
         Boolean rememberMe = Boolean.parseBoolean(request.getParameter("remember"));

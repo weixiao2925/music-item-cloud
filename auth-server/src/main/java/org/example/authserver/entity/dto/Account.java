@@ -40,6 +40,6 @@ public interface Account {
     String role();
 
     @Nullable
-    LocalDateTime registerTime();
+    LocalDateTime registrationTime();
 }
 

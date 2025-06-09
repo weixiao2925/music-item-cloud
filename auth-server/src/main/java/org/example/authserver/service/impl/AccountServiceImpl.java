@@ -17,7 +17,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account findAccountByUsernameToEmail(String username) {
-        return null;
+        return accountRepository.findByUsernameEntity(username);
     }
 
     @Override
