@@ -1,4 +1,4 @@
-package org.example.gatewayserver.entity.vo.response;
+package org.example.authserver.entity.vo.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

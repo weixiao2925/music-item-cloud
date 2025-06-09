@@ -21,6 +21,8 @@ public class Const {
 
     //用户id（在拦截器时就存在了setAttribute里面）
     public static final String ATTR_USER_ID="user_id:";
+    public static final String ATTR_USER_RENEGER ="remember:";
+
     //用户名称
     public static final String ATTR_USERNAME="username:";
 

@@ -1,15 +1,12 @@
+server:
+  port: 8090
+  ssl:
+    enabled: true
+    key-store: classpath:cert/localhost.p12
+    key-store-type: PKCS12
+    key-store-password: 123456
+    key-alias: selfsign
+
 spring:
   application:
     name: gateway-server
-  security:
-    jwt:
-      key:
-        abcdefg
-      access-token-expire:
-        15
-      refresh-token-expire:
-        7
-      temporarilyExpire: # 没有点击记住我的长token过期时间，单位小时
-        3
-server:
-  port: 8090

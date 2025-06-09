@@ -1,4 +1,4 @@
-package org.example.gatewayserver.entity.dto;
+package org.example.authserver.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

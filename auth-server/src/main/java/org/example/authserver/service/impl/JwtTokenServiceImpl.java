@@ -1,17 +1,19 @@
-package org.example.gatewayserver.service.impl;
+package org.example.authserver.service.impl;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.authserver.utils.CookieUtil;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.vo.TokenCheckResult;
 import org.example.commoncore.exception.TokenExpiredException;
 import org.example.commoncore.exception.TokenInvalidException;
 import org.example.commoncore.utils.DigestUtils;
-import org.example.gatewayserver.entity.dto.JwtDetail;
-import org.example.gatewayserver.entity.dto.RefreshResult;
-import org.example.gatewayserver.service.JwtTokenService;
-import org.example.gatewayserver.utils.JwtUtil;
+import org.example.authserver.entity.dto.JwtDetail;
+import org.example.authserver.service.JwtTokenService;
+import org.example.authserver.utils.JwtUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 public class JwtTokenServiceImpl implements JwtTokenService {
 
     private final JwtUtil jwtUtil;
+    private final CookieUtil cookieUtil;
     private final StringRedisTemplate stringRedisTemplate;
 
 
@@ -61,16 +64,14 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         }
     }
 
-    public RefreshResult refreshToken(String sessionId) {
+    @Override
+    public String refreshToken(String sessionId, HttpServletResponse response) {
         String key = Const.SESSION_REFRESH + sessionId;
         String storedRefreshToken = stringRedisTemplate.opsForValue().get(key);
 
-        if (storedRefreshToken == null || storedRefreshToken.isEmpty())
-            return new RefreshResult(null, false, false, "已失效，请重新登录");
-
+        if (storedRefreshToken == null || storedRefreshToken.isEmpty()) return "已失效，请重新登录";
         TokenCheckResult tokenCheckResult = checkToken(storedRefreshToken);
-        if (tokenCheckResult.getCode() != 200)
-            return new RefreshResult(null, false, false, "已失效，请重新登录");
+        if (tokenCheckResult.getCode() != 200) return "已失效，请重新登录";
 
         JwtDetail jwtDetail = jwtUtil.toJwtDetail(storedRefreshToken, Const.SESSION_REFRESH);
         String newSessionId = DigestUtils.generateSessionId(tokenCheckResult.getUserId());
@@ -91,6 +92,12 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
         stringRedisTemplate.delete(Const.SESSION_REFRESH + sessionId);
 
-        return new RefreshResult(newSessionId, jwtDetail.isRememberMe(), true, null);
+        // 清除旧的 Cookie
+        cookieUtil.clearRefreshTokenCookie(response);
+
+        // 设置新 Cookie
+        cookieUtil.setRefreshTokenCookie(response, newSessionId, jwtDetail.isRememberMe());
+
+        return null;
     }
 }

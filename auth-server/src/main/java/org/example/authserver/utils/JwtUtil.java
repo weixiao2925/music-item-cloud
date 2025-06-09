@@ -1,4 +1,4 @@
-package org.example.gatewayserver.utils;
+package org.example.authserver.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.exception.TokenInvalidException;
-import org.example.gatewayserver.entity.dto.JwtDetail;
+import org.example.authserver.entity.dto.JwtDetail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -168,13 +169,47 @@ public class JwtUtil {
         }
     }
 
+    // 验证合法性，并将其加入黑名单
+    public boolean invalidateJwt(String headerToken) {
+        String token = convertToken(headerToken);
+        if (token == null) return false;
 
+        Algorithm algorithm=Algorithm.HMAC256(key);
+        JWTVerifier jwtVerifier=JWT.require(algorithm).build();
+
+        try{
+            DecodedJWT jwt=jwtVerifier.verify(token);
+            String id=jwt.getId();
+            return deleteToken(id,jwt.getExpiresAt());
+        }catch (JWTVerificationException e){
+            return false;
+        }
+    }
 
     // 判断令牌是否在黑名单
     private boolean isInvalidToken (String tokenId) {
         boolean invalid = stringRedisTemplate.hasKey(Const.JWT_BLACK_LIST + tokenId);
         if (invalid) log.info("Token {} 在黑名单中", tokenId);
         return  invalid;
+    }
+
+    //查看请求头是否携带token
+    private String convertToken(String headerToken){
+        if (headerToken == null || !headerToken.startsWith("Bearer ")){
+            return null;
+        }
+        return headerToken.substring(7);
+    }
+
+    // 将令牌加入redis黑名单
+    private boolean deleteToken(String tokenId, Date expireAt) {
+        if (tokenId == null || tokenId.isEmpty()) return false;
+        if (this.isInvalidToken(tokenId)) return false;
+
+        Date now=new Date();
+        long expire=Math.max(expireAt.getTime()-now.getTime(),0);
+        stringRedisTemplate.opsForValue().set(Const.JWT_BLACK_LIST+tokenId, "", expire, TimeUnit.MICROSECONDS);
+        return true;
     }
 
 
