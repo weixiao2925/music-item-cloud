@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: user-server
+    name: backstage-user-server
 
   cloud:
     nacos:
@@ -29,6 +29,3 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-logging:
-  level:
-    org.springframework.beans.factory.support: DEBUG
