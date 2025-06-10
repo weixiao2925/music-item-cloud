@@ -52,3 +52,7 @@ spring:
           uri: lb://backstage-user-server   # 用户服务的服务名
           predicates:
             - Path=/api/user/**     # 匹配 /api/user/** 的所有请求
+        - id: playlist-server
+          uri: lb://backstage-playlist-server   # 播放列表服务的服务名
+          predicates:
+            - Path=/api/playlist/**     # 匹配 /api/playlist/** 的所有请求
