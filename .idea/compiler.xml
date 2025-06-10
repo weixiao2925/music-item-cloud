@@ -46,21 +46,29 @@
         <module name="gateway-server" />
         <module name="auth-server" />
       </profile>
-      <profile name="Annotation profile for user-server" enabled="true">
+      <profile name="Annotation profile for singer-server" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
         </processorPath>
+        <module name="playlist-server" />
+        <module name="aggregation-server" />
+        <module name="song-server" />
+        <module name="singer-server" />
         <module name="user-server" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="aggregation-server" options="" />
       <module name="auth-server" options="" />
       <module name="gateway-server" options="" />
+      <module name="playlist-server" options="" />
+      <module name="singer-server" options="" />
+      <module name="song-server" options="" />
       <module name="user-server" options="" />
     </option>
   </component>

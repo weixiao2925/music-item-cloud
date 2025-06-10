@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/aggregation-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/aggregation-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/auth-server/src/main/resources/application.yml" charset="UTF-8" />
@@ -8,6 +10,12 @@
     <file url="file://$PROJECT_DIR$/common-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/playlist-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/playlist-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/singer-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/singer-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/song-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/song-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user-server/src/main/java" charset="UTF-8" />
