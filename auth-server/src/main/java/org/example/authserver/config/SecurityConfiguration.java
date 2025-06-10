@@ -97,6 +97,14 @@ public class SecurityConfiguration {
 //        System.out.println(user.getUsername());
         Account account = accountService.findAccountByUsernameToEmail(user.getUsername());
 
+        // 查看权限。 权限不够直接返回错误
+        if ("user".equals(account.role())) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            writer.write(RestBean.failure(403, "非管理员用户，无法登录").asJsonString());
+            writer.flush();
+            return;
+        }
+
         Boolean rememberMe = Boolean.parseBoolean(request.getParameter("remember"));
         request.setAttribute(Const.ATTR_USER_RENEGER, rememberMe);
 
