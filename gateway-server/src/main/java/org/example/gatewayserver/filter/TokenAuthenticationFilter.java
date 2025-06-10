@@ -32,13 +32,13 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        System.out.println("拦截请求: " + exchange.getRequest().getURI());
+//        System.out.println("拦截请求: " + exchange.getRequest().getURI());
         String path = exchange.getRequest().getURI().getPath();
         // 白名单接口直接放行
         if (whitelistConfig.getWhitelist().stream().anyMatch(path::startsWith)) {
             return chain.filter(exchange);
         }
-        System.out.println("啊~被拦截了: " + path);
+//        System.out.println("啊~被拦截了: " + path);
 
 
         String sessionId = extractSessionId(exchange);
@@ -56,7 +56,7 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
         TokenCheckResult tokenCheckResult = jwtUtil.checkToken(accessToken);
         int code = tokenCheckResult.getCode();
 
-        System.out.println("code : " + code);
+//        System.out.println("code : " + code);
 
         if (code == 460) {
             log.warn("Token 已过期，返回460，让前端尝试续签");

@@ -45,9 +45,9 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     @Override
     public String createRefreshToken(UserDetails details, int id, String username, Boolean rememberMe, String sessionId) {
         String refreshToken = jwtUtil.createJwt(details, id, username, jwtUtil.expireRefreshTime(rememberMe), rememberMe).trim();
-        System.out.println("生成的refreshToken: " + refreshToken);
-        System.out.println("refreshToken 类型: " + refreshToken.getClass().getName());
-        System.out.println("refreshToken 字节: " + Arrays.toString(refreshToken.getBytes(StandardCharsets.UTF_8)));
+//        System.out.println("生成的refreshToken: " + refreshToken);
+//        System.out.println("refreshToken 类型: " + refreshToken.getClass().getName());
+//        System.out.println("refreshToken 字节: " + Arrays.toString(refreshToken.getBytes(StandardCharsets.UTF_8)));
 
         stringRedisTemplate.opsForValue().set(
                 Const.SESSION_REFRESH + sessionId,

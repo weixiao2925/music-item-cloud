@@ -35,7 +35,7 @@ public class JwtUtil {
     // 验证token的有效性，并返回用户信息
     public TokenCheckResult checkToken(String token) {
         TokenCheckResult result = new TokenCheckResult();
-        System.out.println("token: " + token);
+//        System.out.println("token: " + token);
         try {
             DecodedJWT jwt = this.parseToken(token);
             // 成功解析，可继续业务逻辑

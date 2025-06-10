@@ -35,11 +35,10 @@ public class AuthController {
         String sessionId = cookieUtil.getRefreshTokenCookie(request);
         if (sessionId == null || sessionId.isEmpty()) return RestBean.unauthorized("身份已过期，请重新登录");
 
-        System.out.println("获取到的sessionId: " + sessionId.substring(0, 10) + "...");
+//        System.out.println("获取到的sessionId: " + sessionId.substring(0, 10) + "...");
 
         String refreshToken = stringRedisTemplate.opsForValue().get(Const.SESSION_REFRESH + sessionId);
-        // TODO 这里redis读取有问题
-        System.out.println("redis: "+refreshToken);
+//        System.out.println("redis: "+refreshToken);
         DecodedJWT jwt = jwtUtil.parseToken(refreshToken);
         boolean remember = jwt.getClaim("remember").asBoolean();
 

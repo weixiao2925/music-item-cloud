@@ -26,7 +26,7 @@ spring:
       key:
         abcdefg
       access-token-expire:
-        1
+        15
       refresh-token-expire:
         7
       temporarilyExpire: # 没有点击记住我的长token过期时间，单位小时
