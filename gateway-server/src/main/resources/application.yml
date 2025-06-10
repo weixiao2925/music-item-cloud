@@ -12,6 +12,7 @@ my:
     whitelist:
       - /api/auth/login
       - /api/auth/logout
+      - /api/auth/refreshVerify
 
 spring:
   application:

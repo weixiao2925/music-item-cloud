@@ -56,6 +56,8 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
         TokenCheckResult tokenCheckResult = jwtUtil.checkToken(accessToken);
         int code = tokenCheckResult.getCode();
 
+        System.out.println("code : " + code);
+
         if (code == 460) {
             log.warn("Token 已过期，返回460，让前端尝试续签");
             return writeJsonResponse(exchange, RestBean.tokenExpired(""));

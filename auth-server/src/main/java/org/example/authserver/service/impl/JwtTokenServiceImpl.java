@@ -5,6 +5,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.authserver.entity.dto.Account;
+import org.example.authserver.entity.vo.response.AuthorizeVO;
+import org.example.authserver.service.AccountService;
 import org.example.authserver.utils.CookieUtil;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.vo.TokenCheckResult;
@@ -18,6 +21,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,6 +32,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
+    private final AccountService accountService;
     private final StringRedisTemplate stringRedisTemplate;
 
 
@@ -36,12 +44,18 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public String createRefreshToken(UserDetails details, int id, String username, Boolean rememberMe, String sessionId) {
-        String refreshToken = jwtUtil.createJwt(details, id, username, jwtUtil.expireRefreshTime(rememberMe), rememberMe);
+        String refreshToken = jwtUtil.createJwt(details, id, username, jwtUtil.expireRefreshTime(rememberMe), rememberMe).trim();
+        System.out.println("生成的refreshToken: " + refreshToken);
+        System.out.println("refreshToken 类型: " + refreshToken.getClass().getName());
+        System.out.println("refreshToken 字节: " + Arrays.toString(refreshToken.getBytes(StandardCharsets.UTF_8)));
+
         stringRedisTemplate.opsForValue().set(
                 Const.SESSION_REFRESH + sessionId,
                 refreshToken,
-                jwtUtil.expireRefreshSeconds(rememberMe)
+                jwtUtil.expireRefreshSeconds(rememberMe),
+                TimeUnit.SECONDS  // ✅ 推荐明确使用秒
         );
+
         return refreshToken;
     }
 
@@ -65,18 +79,23 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     }
 
     @Override
-    public String refreshToken(String sessionId, HttpServletResponse response) {
+    public AuthorizeVO refreshToken(String sessionId, HttpServletResponse response) {
         String key = Const.SESSION_REFRESH + sessionId;
         String storedRefreshToken = stringRedisTemplate.opsForValue().get(key);
 
-        if (storedRefreshToken == null || storedRefreshToken.isEmpty()) return "已失效，请重新登录";
+        if (storedRefreshToken == null || storedRefreshToken.isEmpty()) return null;
         TokenCheckResult tokenCheckResult = checkToken(storedRefreshToken);
-        if (tokenCheckResult.getCode() != 200) return "已失效，请重新登录";
+        if (tokenCheckResult.getCode() != 200) return null;
 
         JwtDetail jwtDetail = jwtUtil.toJwtDetail(storedRefreshToken, Const.SESSION_REFRESH);
         String newSessionId = DigestUtils.generateSessionId(tokenCheckResult.getUserId());
 
-        createAccessToken(
+        String username = jwtDetail.getUsername();
+        Account account = accountService.findAccountByUsernameToEmail(username);
+
+        if (account == null) return null;
+
+        String accessToken = createAccessToken(
                 jwtDetail.getUserDetails(),
                 tokenCheckResult.getUserId(),
                 tokenCheckResult.getUsername(),
@@ -98,6 +117,12 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         // 设置新 Cookie
         cookieUtil.setRefreshTokenCookie(response, newSessionId, jwtDetail.isRememberMe());
 
-        return null;
+        return new AuthorizeVO(
+                account.username(),
+                account.role(),
+                accessToken,
+                jwtDetail.isRememberMe(),
+                jwtUtil.expireAccessTime()
+        );
     }
 }

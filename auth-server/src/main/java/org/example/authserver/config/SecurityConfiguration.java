@@ -43,9 +43,8 @@ public class SecurityConfiguration {
         return http
                 .authorizeHttpRequests(conf -> conf
                         .requestMatchers(
-                                "/api/auth/login"
+                                "/api/auth/**"
                         ).permitAll()   // 不拦截这些
-                        .anyRequest().authenticated()  // 其它都需要认证
                 )
                 .formLogin(conf -> conf
                         .loginProcessingUrl("/api/auth/login")
