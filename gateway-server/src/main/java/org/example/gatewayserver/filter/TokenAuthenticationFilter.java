@@ -66,6 +66,8 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
             return writeJsonResponse(exchange, RestBean.unauthorized("Token 不合法"));
         }
 
+
+
         // 通过 Token 校验，向下传递用户信息
         ServerWebExchange mutatedExchange = exchange.mutate()
                 .request(builder -> builder

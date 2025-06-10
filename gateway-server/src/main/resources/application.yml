@@ -48,3 +48,7 @@ spring:
           uri: lb://auth-server   # 认证服务的服务名
           predicates:
             - Path=/api/auth/**     # 匹配 /api/auth/** 的所有请求
+        - id: user-server
+          uri: lb://user-server   # 用户服务的服务名
+          predicates:
+              - Path=/api/user/**     # 匹配 /api/user/** 的所有请求
