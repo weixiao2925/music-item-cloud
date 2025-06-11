@@ -56,3 +56,11 @@ spring:
           uri: lb://backstage-playlist-server   # 播放列表服务的服务名
           predicates:
             - Path=/api/playlist/**     # 匹配 /api/playlist/** 的所有请求
+        - id: song-server
+          uri: lb://backstage-song-server   # 歌曲服务的服务名
+          predicates:
+            - Path=/api/song/**     # 匹配 /api/song/** 的所有请求
+        - id: singer-server
+          uri: lb://backstage-singer-server   # 歌手服务的服务名
+          predicates:
+              - Path=/api/singer/**     # 匹配 /api/singer/** 的所有请求

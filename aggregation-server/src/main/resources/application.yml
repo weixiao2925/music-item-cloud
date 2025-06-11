@@ -10,6 +10,9 @@ server:
 spring:
   application:
     name: backstage-aggregation-server
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8  # Set to your timezone
   cloud:
     nacos:
       discovery:
@@ -22,3 +25,8 @@ spring:
         group: DEFAULT_GROUP
         namespace: public
         refresh-enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
