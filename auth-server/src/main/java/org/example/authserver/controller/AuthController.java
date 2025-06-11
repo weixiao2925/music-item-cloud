@@ -51,7 +51,7 @@ public class AuthController {
     }
 
     @PostMapping("/change-password")
-    public RestBean<Void> changePassword(@RequestAttribute("id") int id,
+    public RestBean<Void> changePassword(@RequestHeader(Const.ATTR_USER_ID) int id,
                                          @RequestBody @Valid ChangePasswordVO vo){
         String message=accountService.changePassword(id, vo);
         return message==null
