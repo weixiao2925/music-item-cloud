@@ -16,6 +16,8 @@
         <module>user-server</module>
         <module>aggregation-server</module>
         <module>song-server</module>
+        <module>playlist-server</module>
+        <module>singer-server</module>
     </modules>
 
     <properties>
