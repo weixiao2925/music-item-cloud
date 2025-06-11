@@ -23,6 +23,7 @@ public interface IndexUserDataMapper extends BaseMapper<UserDataList> {
     @Select("""
             select user_id as id,name, sex, username as email, birth_date, signature, region, avatar_path ,registration_time
             from users 
+            where role = 'user'
             limit #{page},#{pageSize}
             """)
     List<UserDataList> getUserDataList(int page, int pageSize);
