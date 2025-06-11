@@ -3,19 +3,27 @@ package org.example.userserver.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.example.commoncore.entity.dto.UserDataList;
+import org.example.commoncore.entity.vo.response.AccountInfoVO;
 
 import java.sql.Date;
 import java.util.List;
 
 @Mapper
 public interface IndexUserDataMapper extends BaseMapper<UserDataList> {
+
+    @Select("""
+        select user_id, username, name, sex, birth_date, region, signature, avatar_path, role, registration_time from `mc-user`.users
+        where username = #{username}
+    """)
+    AccountInfoVO getUserAccountInfo(@Param("username") String username);
+
     //----用户管理页
     //--查询
     //分页查询
     @Select("""
-            select user_id as id,name, sex, username as email, birth_date, signature, region, avatar_path ,registrationTime
+            select user_id as id,name, sex, username as email, birth_date, signature, region, avatar_path ,registration_time
             from users 
-            limit #{page},#{pageSize}是
+            limit #{page},#{pageSize}
             """)
     List<UserDataList> getUserDataList(int page, int pageSize);
     //查询users总数撒大大
@@ -25,7 +33,7 @@ public interface IndexUserDataMapper extends BaseMapper<UserDataList> {
     @Select("select exists(select 1 from users where user_id=#{user_id})")
     Integer isExist(@Param("user_id") Integer user_id);
     //----搜索功能
-    @Select("select user_id as id,name, sex, username as email, birth_date, signature, region, avatar_path,registrationTime " +
+    @Select("select user_id as id,name, sex, username as email, birth_date, signature, region, avatar_path,registration_time " +
             "from users where (users.role='root' or users.role='supperRoot') AND (name like CONCAT('%', #{keyName}, '%') or users.username like concat('%' , #{keyName} , '%')) " +
             "limit #{page},#{pageSize}")
     UserDataList[] getUserDataByKeyName(String keyName, int page, int pageSize);
@@ -38,11 +46,11 @@ public interface IndexUserDataMapper extends BaseMapper<UserDataList> {
     void changeUsersData(@Param("username") String username, @Param("name") String name, @Param("sex") String sex, @Param("birth_date") Date birth_date, @Param("region") String region,@Param("signature") String signature);
 
     //管理员信息
-    @Select("select user_id as id,name,sex,username as email, birth_date, signature, region, avatar_path , registrationTime " +
+    @Select("select user_id as id,name,sex,username as email, birth_date, signature, region, avatar_path , registration_time " +
             "from users where username=#{username} and (users.role='root' or users.role='supperRoot')")
     UserDataList getRootUserData(String username);
     //用户信息
-    @Select("select user_id as id,name,sex,username as email, birth_date, signature, region, avatar_path , registrationTime " +
+    @Select("select user_id as id,name,sex,username as email, birth_date, signature, region, avatar_path , registration_time " +
             "from users where username=#{username} and users.role='user' ")
     UserDataList getUserData(String username);
 
