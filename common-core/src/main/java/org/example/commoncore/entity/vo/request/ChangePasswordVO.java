@@ -8,5 +8,5 @@ public class ChangePasswordVO {
     @Length(min = 6,max = 20)
     private String password;
     @Length(min = 6,max = 20)
-    private String new_password;
+    private String newPassword;
 }

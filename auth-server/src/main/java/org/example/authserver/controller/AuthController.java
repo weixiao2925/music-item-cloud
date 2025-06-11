@@ -3,20 +3,20 @@ package org.example.authserver.controller;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.authserver.entity.vo.response.AuthorizeVO;
+import org.example.authserver.service.AccountService;
 import org.example.authserver.service.JwtTokenService;
 import org.example.authserver.utils.CookieUtil;
 import org.example.authserver.utils.JwtUtil;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.RestBean;
+import org.example.commoncore.entity.vo.request.ChangePasswordVO;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Validated
@@ -29,6 +29,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final JwtTokenService jwtTokenService;
     private final StringRedisTemplate stringRedisTemplate;
+    private final AccountService accountService;
 
     @PostMapping("/refreshVerify")
     public RestBean<AuthorizeVO> refresh(HttpServletRequest request, HttpServletResponse response) {
@@ -47,6 +48,15 @@ public class AuthController {
         if (vo == null) return RestBean.unauthorized("身份已过期，请重新登录");
         vo.setRememberMe(remember);
         return RestBean.success(vo);
+    }
+
+    @PostMapping("/change-password")
+    public RestBean<Void> changePassword(@RequestAttribute("id") int id,
+                                         @RequestBody @Valid ChangePasswordVO vo){
+        String message=accountService.changePassword(id, vo);
+        return message==null
+                ? RestBean.success()
+                : RestBean.failure(400,message);
     }
 
     @GetMapping("/test")
