@@ -21,20 +21,20 @@ public class PlayListController {
 
     @ResponseBody
     @GetMapping("/getPlayListTableList")
-    public RestBean<TableListVO> getPlayListTableList(@RequestParam int page,@RequestParam int pageSize) {
+    public RestBean<TableListVO> getPlayListTableList(@RequestParam("page") int page,@RequestParam("pageSize") int pageSize) {
         String message=playListDataService.getPlayListTableListVerify(page,pageSize);
         return message!=null?
                 RestBean.failure(400,message): RestBean.success(playListDataService.getPlayListTableList(page,pageSize));
     }
     @ResponseBody
     @GetMapping("/getPlayListDataOne")
-    public RestBean<TableListVO> getPlayListDataOne(@RequestParam int playlist_id){
+    public RestBean<TableListVO> getPlayListDataOne(@RequestParam("playlist_id") int playlist_id){
         return RestBean.success(playListDataService.getPlayDataList(playlist_id));
     }
     //搜索
     @ResponseBody
     @GetMapping("/searchPlayListTableList")
-    public <T> RestBean<TableListVO> searchPlayListTableList(@RequestParam T searchText,@RequestParam int page,@RequestParam int pageSize) {
+    public <T> RestBean<TableListVO> searchPlayListTableList(@RequestParam("searchText") T searchText,@RequestParam("page") int page,@RequestParam("pageSize") int pageSize) {
         String message=playListDataService.getPlayListTableListVerify(page,pageSize);
         return message !=null?
                 RestBean.failure(400,message) : RestBean.success(playListDataService.getSearchDataTableList(searchText,page,pageSize));
@@ -42,7 +42,7 @@ public class PlayListController {
     //删除
     @ResponseBody
     @GetMapping("/deletePlayLists")
-    public RestBean<Void> deletePlayList(@RequestParam List<Long> playListIds) {
+    public RestBean<Void> deletePlayList(@RequestParam("playListIds") List<Long> playListIds) {
         String message= playListDataService.deletePlayList(playListIds);
         return message != null ?
                 RestBean.failure(400,message) : RestBean.success();
@@ -50,7 +50,7 @@ public class PlayListController {
     //修改
     @ResponseBody
     @GetMapping("/changePlayLists")
-    public RestBean<Void> changePlayList(@RequestParam int playlist_id,@RequestParam String playlist_name,@RequestParam String category,@RequestParam String intro) {
+    public RestBean<Void> changePlayList(@RequestParam("playlist_id") int playlist_id,@RequestParam("playlist_name") String playlist_name,@RequestParam("category") String category,@RequestParam("intro") String intro) {
         String message= playListDataService.updatePlayList(playlist_id,playlist_name,category,intro);
         return message != null ?
                 RestBean.failure(400,message) : RestBean.success();
@@ -58,14 +58,14 @@ public class PlayListController {
     //提交歌单头像图片
     @ResponseBody
     @PostMapping("/upPlaylistAvatar")
-    public RestBean<Void> upPlaylistAvatar(@RequestParam int playlist_id,@RequestParam MultipartFile file){
+    public RestBean<Void> upPlaylistAvatar(@RequestParam("playlist_id") int playlist_id,@RequestParam("file") MultipartFile file){
         String message=playListDataService.uploadFile(playlist_id,file);
         return message !=null ?
                 RestBean.failure(400,message) : RestBean.success();
     }
     //获取歌单图片
     @GetMapping("/getPlaylistAvatar")
-    public ResponseEntity<org.springframework.core.io.Resource> getPlaylistAvatar(@RequestParam int playlist_id){
+    public ResponseEntity<org.springframework.core.io.Resource> getPlaylistAvatar(@RequestParam("playlist_id") int playlist_id){
         return playListDataService.getFile(playlist_id);
     }
 

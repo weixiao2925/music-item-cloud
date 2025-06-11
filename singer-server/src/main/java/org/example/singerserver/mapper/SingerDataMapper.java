@@ -14,7 +14,7 @@ public interface SingerDataMapper extends BaseMapper<SingerDataList> {
     //----查询
     //分页查询
     @Select("select singer_id, singer_name, singer.sex, singer.nationality, singer.birth_date, singer.intro, singer.singer_path from singer limit #{page},#{pageSize}")
-    SingerDataList[] getSingerDataList(int page,int pageSize);
+    SingerDataList[] getSingerDataList(@Param("page") int page,@Param("pageSize") int pageSize);
     //查询singer总数
     @Select("select count(*) from singer")
     Integer getSingerSum();
@@ -24,7 +24,7 @@ public interface SingerDataMapper extends BaseMapper<SingerDataList> {
 
     //----搜索
     @Select("select singer_id, singer_name, singer.sex, singer.nationality, singer.birth_date, singer.intro, singer.singer_path from singer where singer_name like concat('%', #{keyName}, '%') limit #{page},#{pageSize}")
-    SingerDataList[] getSingerDataByKeyName(String keyName, int page, int pageSize);
+    SingerDataList[] getSingerDataByKeyName(String keyName,@Param("page") int page,@Param("pageSize") int pageSize);
     //搜索出来的数据总数
     @Select("select count(*) from singer where singer_name like concat('%',#{keyName},'%')")
     int getSearchSingerCount(String keyName);

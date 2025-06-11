@@ -23,7 +23,7 @@ public class SingerController {
 
     @ResponseBody
     @GetMapping("/getSingerTableList")
-    public RestBean<TableListVO> getSingerTableList(@RequestParam int page, @RequestParam int pageSize) {
+    public RestBean<TableListVO> getSingerTableList(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
         String message=singerDataService.getSingerTableListVerify(page,pageSize);
         return message!=null?
                 RestBean.failure(400,message): RestBean.success(singerDataService.getSingerTableList(page,pageSize));
@@ -31,20 +31,20 @@ public class SingerController {
     //搜索
     @ResponseBody
     @GetMapping("/searchSingerTableList")
-    public <T> RestBean<TableListVO> searchSingerTableList(@RequestParam T searchText,@RequestParam int page,@RequestParam int pageSize) {
+    public <T> RestBean<TableListVO> searchSingerTableList(@RequestParam("searchText") T searchText,@RequestParam("page") int page,@RequestParam("pageSize") int pageSize) {
         String message=singerDataService.getSingerTableListVerify(page,pageSize);
         return message!=null?
                 RestBean.failure(400,message) : RestBean.success(singerDataService.getSearchDataTableList(searchText,page,pageSize));
     }
     @ResponseBody
     @GetMapping("/getSingerOneData")
-    public RestBean<TableListVO> getSingerOneData(@RequestParam int singer_id){
+    public RestBean<TableListVO> getSingerOneData(@RequestParam("singer_id") int singer_id){
         return RestBean.success(singerDataService.getSingerDataList(singer_id));
     }
     //删除
     @ResponseBody
     @GetMapping("/deleteSingers")
-    public RestBean<Void> deleteSinger(@RequestParam List<Long> singerIds) {
+    public RestBean<Void> deleteSinger(@RequestParam("singerIds") List<Long> singerIds) {
         String message=singerDataService.deleteSingerTables(singerIds);
         return message != null ?
                 RestBean.failure(400,message) : RestBean.success();
@@ -60,12 +60,12 @@ public class SingerController {
     //修改
     @ResponseBody
     @GetMapping("/changeSinger")
-    public RestBean<Void> changeSinger(@RequestParam int singer_id,
-                                       @RequestParam String singer_name,
-                                       @RequestParam String sex,
-                                       @RequestParam String nationality,
-                                       @RequestParam String birthDateString,
-                                       @RequestParam String intro){
+    public RestBean<Void> changeSinger(@RequestParam("singer_id") int singer_id,
+                                       @RequestParam("singer_name") String singer_name,
+                                       @RequestParam("sex") String sex,
+                                       @RequestParam("nationality") String nationality,
+                                       @RequestParam("birthDateString") String birthDateString,
+                                       @RequestParam("intro") String intro){
         String message=singerDataService.updateSingerTable(singer_id,singer_name,sex,nationality,birthDateString,intro);
         return message != null ?
                 RestBean.failure(400,message) : RestBean.success();
@@ -73,14 +73,14 @@ public class SingerController {
     //提交歌手头像图片
     @ResponseBody
     @PostMapping("/upSingerAvatar")
-    public RestBean<Void> upSingerAvatar(@RequestParam int singer_id,@RequestParam MultipartFile file){
+    public RestBean<Void> upSingerAvatar(@RequestParam("singer_id") int singer_id,@RequestParam("file") MultipartFile file){
         String message=singerDataService.uploadFile(singer_id,file);
         return message !=null ?
                 RestBean.failure(400,message) : RestBean.success();
     }
     //获取歌手图片
     @GetMapping("/getSingerAvatar")
-    public ResponseEntity<Resource> getSingerAvatar(@RequestParam int singer_id){
+    public ResponseEntity<Resource> getSingerAvatar(@RequestParam("singer_id") int singer_id){
         return singerDataService.getFile(singer_id);
     }
 
