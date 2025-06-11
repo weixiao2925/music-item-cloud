@@ -13,6 +13,10 @@ my:
       - /api/auth/login
       - /api/auth/logout
       - /api/auth/refreshVerify
+      - /api/user/getUserAvatar
+      - /api/playlist/getPlaylistAvatar
+      - /api/song/getSongAvatar
+      - /api/singer/getSingerAvatar
 
 spring:
   application:

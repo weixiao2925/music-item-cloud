@@ -81,7 +81,10 @@ public class SingerController {
     //获取歌手图片
     @GetMapping("/getSingerAvatar")
     public ResponseEntity<Resource> getSingerAvatar(@RequestParam("singer_id") int singer_id){
-        return singerDataService.getFile(singer_id);
+//        System.out.println("获取歌手头像，singer_id: " + singer_id);
+        ResponseEntity<Resource> file = singerDataService.getFile(singer_id);
+        System.out.println(file.getBody());
+        return file;
     }
 
 }
