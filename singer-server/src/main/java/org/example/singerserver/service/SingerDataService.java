@@ -1,6 +1,7 @@
 package org.example.singerserver.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.SingerDataList;
 import org.example.commoncore.entity.vo.request.SingerAddVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
@@ -13,6 +14,11 @@ import java.util.List;
 
 @Service
 public interface SingerDataService extends IService<SingerDataList> {
+    Integer getSingerSum();
+    HomeDataList[] getSingerSexList();
+    HomeDataList[] getSingerNationalityList();
+
+
     TableListVO getSingerTableList(int page, int pageSize);
     String getSingerTableListVerify(int page, int pageSize);
     <T> TableListVO getSearchDataTableList(T searchText, int page, int pageSize);
@@ -23,4 +29,6 @@ public interface SingerDataService extends IService<SingerDataList> {
     TableListVO getSingerDataList(int singer_id);
     String uploadFile(int singer_id,MultipartFile file);
     ResponseEntity<Resource> getFile(int singer_id);
+
+
 }

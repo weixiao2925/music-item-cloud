@@ -19,6 +19,7 @@ spring:
     nacos:
       discovery:
         server-addr: http://127.0.0.1:8848
+        secure: true
         metadata:
           secure: true
       config:

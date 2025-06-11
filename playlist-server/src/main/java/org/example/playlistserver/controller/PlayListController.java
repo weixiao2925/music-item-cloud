@@ -19,6 +19,11 @@ public class PlayListController {
 
     private final PlayListDataService playListDataService;
 
+    @GetMapping("/getPlaylistSum")
+    public Integer getPlaylistSum() {
+        return playListDataService.getPlaylistSum();
+    }
+
     @ResponseBody
     @GetMapping("/getPlayListTableList")
     public RestBean<TableListVO> getPlayListTableList(@RequestParam("page") int page,@RequestParam("pageSize") int pageSize) {

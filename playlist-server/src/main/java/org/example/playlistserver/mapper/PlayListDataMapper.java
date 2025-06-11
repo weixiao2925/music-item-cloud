@@ -8,6 +8,11 @@ import java.util.List;
 
 @Mapper
 public interface PlayListDataMapper extends BaseMapper<PlayListDataList> {
+    //获取playList总数
+    @Select("select count(*) from playlist")
+    Integer getPlaylistSum();
+
+
     //分页查询
     @Select("select playlist_id, playlist_name, user_name, category, intro, playList_path from playlist limit #{page},#{pageSize}")
     PlayListDataList[] getPlayListDataList(@Param("page") int page,@Param("pageSize") int pageSize);

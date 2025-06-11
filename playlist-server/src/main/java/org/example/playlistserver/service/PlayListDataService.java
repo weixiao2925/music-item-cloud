@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface PlayListDataService {
+    Integer getPlaylistSum();
+
     TableListVO getPlayListTableList(int page, int pageSize);
     String getPlayListTableListVerify(int page, int pageSize);
     <T> TableListVO getSearchDataTableList(T searchText, int page, int pageSize);

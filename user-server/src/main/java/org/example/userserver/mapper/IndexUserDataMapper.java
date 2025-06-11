@@ -2,6 +2,7 @@ package org.example.userserver.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
+import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.UserDataList;
 import org.example.commoncore.entity.vo.response.AccountInfoVO;
 
@@ -10,6 +11,14 @@ import java.util.List;
 
 @Mapper
 public interface IndexUserDataMapper extends BaseMapper<UserDataList> {
+    //获取用户总数
+    @Select("select count(*) from users")
+    Integer getUserSum();
+    //查询用户性别
+    @Select("select  users.sex as value,count(*) as sum from users group by users.sex")
+    HomeDataList[] getUserSexList();
+
+
 
     @Select("""
         select user_id, username, name, sex, birth_date, region, signature, avatar_path, role, registration_time from `mc-user`.users

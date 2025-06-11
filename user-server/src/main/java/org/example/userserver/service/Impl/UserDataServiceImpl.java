@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.example.commoncore.constants.Const;
+import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.UserDataList;
 import org.example.commoncore.entity.vo.response.AccountInfoVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
@@ -28,6 +29,15 @@ public class UserDataServiceImpl extends ServiceImpl<IndexUserDataMapper, UserDa
 
     @Resource
     private IndexUserDataMapper indexUserDataMapper;
+
+    @Override
+    public Integer getUserSum() {
+        return indexUserDataMapper.getUserSum();
+    }
+    @Override
+    public HomeDataList[] getUserSexList() {
+        return indexUserDataMapper.getUserSexList();
+    }
 
     @Override
     public AccountInfoVO getUserAccountInfo(String username) {

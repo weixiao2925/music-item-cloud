@@ -26,6 +26,11 @@ public class PlayListDataServiceImpl extends ServiceImpl<PlayListDataMapper, Pla
     private final PlayListDataMapper indexPlayListDataMapper;
 
     @Override
+    public Integer getPlaylistSum() {
+        return indexPlayListDataMapper.getPlaylistSum();
+    }
+
+    @Override
     public TableListVO getPlayListTableList(int page, int pageSize) {
         if (page<1 || pageSize<1) {
             throw new IllegalArgumentException("请求参数（page,pageSize）不能为小于1的数");

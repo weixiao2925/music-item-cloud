@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.RestBean;
+import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.vo.response.AccountInfoVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.userserver.service.UserDataService;
@@ -21,6 +22,19 @@ import java.util.List;
 public class UserController {
 
     private final UserDataService userDataService;
+
+    @GetMapping("/getUserSum")
+    public Integer getUserSum() {
+        return userDataService.getUserSum();
+    }
+    @GetMapping("/getUserSexList")
+    public HomeDataList[] getUserSexList() {
+        HomeDataList[] homeDataLists = userDataService.getUserSexList();
+        if (homeDataLists == null) {
+            return new HomeDataList[0];
+        }
+        return homeDataLists;
+    }
 
     @GetMapping("/userInfo")
     public RestBean<AccountInfoVO> getUserInfo(@RequestParam("username") @Email String username) {

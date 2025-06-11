@@ -3,6 +3,7 @@ package org.example.singerserver.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.example.commoncore.constants.Const;
+import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.SingerDataList;
 import org.example.commoncore.entity.vo.request.SingerAddVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
@@ -26,6 +27,17 @@ public class SingerDataServiceImpl extends ServiceImpl<SingerDataMapper, SingerD
 
     @Resource
     private SingerDataMapper indexSingerDataMapper;
+
+
+    public Integer getSingerSum () {
+        return indexSingerDataMapper.getSingerSum();
+    }
+    public HomeDataList[] getSingerSexList() {
+        return indexSingerDataMapper.getSingerSexList();
+    }
+    public HomeDataList[] getSingerNationalityList() {
+        return indexSingerDataMapper.getSingerNationalityList();
+    }
 
     @Override
     public TableListVO getSingerTableList(int page, int pageSize) {

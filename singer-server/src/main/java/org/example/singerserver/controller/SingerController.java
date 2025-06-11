@@ -3,6 +3,7 @@ package org.example.singerserver.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commoncore.entity.RestBean;
+import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.vo.request.SingerAddVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.singerserver.service.SingerDataService;
@@ -20,6 +21,20 @@ import java.util.List;
 public class SingerController {
 
     private final SingerDataService singerDataService;
+
+    @GetMapping("/getSingerSum")
+    public Integer getSingerSum() {
+        return singerDataService.getSingerSum();
+    }
+    @GetMapping("/getSingerSexList")
+    public HomeDataList[] getSingerSexList() {
+        return singerDataService.getSingerSexList();
+    }
+    @GetMapping("/getSingerNationalityList")
+    public HomeDataList[] getSingerNationalityList() {
+        return singerDataService.getSingerNationalityList();
+    }
+
 
     @ResponseBody
     @GetMapping("/getSingerTableList")
@@ -82,9 +97,8 @@ public class SingerController {
     @GetMapping("/getSingerAvatar")
     public ResponseEntity<Resource> getSingerAvatar(@RequestParam("singer_id") int singer_id){
 //        System.out.println("获取歌手头像，singer_id: " + singer_id);
-        ResponseEntity<Resource> file = singerDataService.getFile(singer_id);
-        System.out.println(file.getBody());
-        return file;
+        //        System.out.println(file.getBody());
+        return singerDataService.getFile(singer_id);
     }
 
 }

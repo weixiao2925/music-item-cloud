@@ -2,6 +2,7 @@ package org.example.singerserver.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
+import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.SingerDataList;
 import org.example.commoncore.entity.vo.request.SingerAddVO;
 
@@ -10,14 +11,24 @@ import java.util.List;
 
 @Mapper
 public interface SingerDataMapper extends BaseMapper<SingerDataList> {
+    //获取singer总数
+    @Select("select count(*) from singer")
+    Integer getSingerSum();
+    //查询singer性别
+    @Select("select singer.sex as value,count(*) as sum from singer group by singer.sex")
+    HomeDataList[] getSingerSexList();
+    //查询singer国籍
+    @Select("select singer.nationality as value, count(*) as sum from singer group by singer.nationality")
+    HomeDataList[] getSingerNationalityList();
+
+
+
 
     //----查询
     //分页查询
     @Select("select singer_id, singer_name, singer.sex, singer.nationality, singer.birth_date, singer.intro, singer.singer_path from singer limit #{page},#{pageSize}")
     SingerDataList[] getSingerDataList(@Param("page") int page,@Param("pageSize") int pageSize);
-    //查询singer总数
-    @Select("select count(*) from singer")
-    Integer getSingerSum();
+
     //根据singer_id查找
     @Select("select * from singer where singer_id=#{singer_id}")
     SingerDataList getSingerDataBySingerId(int singer_id);
