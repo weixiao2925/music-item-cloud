@@ -3,7 +3,9 @@ package org.example.userserver.controller;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.RestBean;
+import org.example.commoncore.entity.vo.response.AccountInfoVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.userserver.service.UserDataService;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,14 @@ import java.util.List;
 public class UserController {
 
     private final UserDataService userDataService;
+
+    @GetMapping("/userInfo")
+    public RestBean<AccountInfoVO> getUserInfo(@RequestParam("username") @Email String username) {
+        AccountInfoVO accountInfoVO = userDataService.getUserAccountInfo(username);
+        return accountInfoVO == null
+                ? RestBean.failure(400, "用户信息获取失败")
+                : RestBean.success(accountInfoVO);
+    }
 
     @ResponseBody
     @GetMapping("/getUserTableList")
@@ -75,8 +85,18 @@ public class UserController {
     }
     //获取用户图片
     @GetMapping("/getUserAvatar")
-    public ResponseEntity<org.springframework.core.io.Resource> getUserAvatar(@RequestParam int user_id){
+    public ResponseEntity<org.springframework.core.io.Resource> getUserAvatar(
+            @RequestParam("user_id") int user_id) {
         return userDataService.getFile(user_id);
+    }
+
+    //----个人页数据查询
+    @ResponseBody
+    @GetMapping("/getRootPersonalOne")
+    public RestBean<TableListVO> getRootPersonalOne(@RequestParam @Email String username) {
+        String message=userDataService.getRootUserTableListVerify(username);
+        return message != null ?
+                RestBean.failure(400,message) : RestBean.success(userDataService.getRootUserTableList(username));
     }
 
 

@@ -5,6 +5,7 @@ import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.dto.UserDataList;
+import org.example.commoncore.entity.vo.response.AccountInfoVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.userserver.mapper.IndexUserDataMapper;
 import org.example.userserver.service.UserDataService;
@@ -27,6 +28,11 @@ public class UserDataServiceImpl extends ServiceImpl<IndexUserDataMapper, UserDa
 
     @Resource
     private IndexUserDataMapper indexUserDataMapper;
+
+    @Override
+    public AccountInfoVO getUserAccountInfo(String username) {
+        return indexUserDataMapper.getUserAccountInfo(username);
+    }
 
     //获取用户信息
     public TableListVO getUserTableList(int page, int pageSize) {
@@ -72,6 +78,7 @@ public class UserDataServiceImpl extends ServiceImpl<IndexUserDataMapper, UserDa
     @Override
     public TableListVO getUserTableList(String username) {
         UserDataList userDataOne=indexUserDataMapper.getUserData(username);
+        System.out.println(username);
         if(userDataOne==null) throw new IllegalArgumentException("请求账号出错");
         TableListVO vo=new TableListVO();
         vo.setUserDataOne(userDataOne);
@@ -146,6 +153,7 @@ public class UserDataServiceImpl extends ServiceImpl<IndexUserDataMapper, UserDa
 
     @Override
     public ResponseEntity<org.springframework.core.io.Resource> getFile(int user_id) {
+        System.out.println("user_id: " + user_id);
         return getResourceResponseEntity(indexUserDataMapper.getUserPath(user_id));
     }
 
