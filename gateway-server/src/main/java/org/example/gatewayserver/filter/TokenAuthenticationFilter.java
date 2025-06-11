@@ -38,7 +38,7 @@ public class TokenAuthenticationFilter implements GlobalFilter, Ordered {
         if (whitelistConfig.getWhitelist().stream().anyMatch(path::startsWith)) {
             return chain.filter(exchange);
         }
-//        System.out.println("啊~被拦截了: " + path);
+        System.out.println("啊~被拦截了: " + path);
 
 
         String sessionId = extractSessionId(exchange);
