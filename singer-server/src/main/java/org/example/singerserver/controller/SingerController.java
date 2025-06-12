@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.commoncore.entity.RestBean;
 import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.vo.request.SingerAddVO;
+import org.example.commoncore.entity.vo.request.SongAddVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.singerserver.service.SingerDataService;
 import org.springframework.core.io.Resource;
@@ -33,6 +34,30 @@ public class SingerController {
     @GetMapping("/getSingerNationalityList")
     public HomeDataList[] getSingerNationalityList() {
         return singerDataService.getSingerNationalityList();
+    }
+
+    // 歌曲
+    @GetMapping("/getSongSum")
+    public Integer getSongSum(@RequestParam("singer_id") int singer_id) {
+        return singerDataService.getSongSum(singer_id);
+    }
+    @GetMapping("/getSongIdList")
+    public List<Integer> getSongIdList(@RequestParam("singer_id") int singer_id,
+                                       @RequestParam("page") int page,
+                                       @RequestParam("pageSize") int pageSize) {
+        return singerDataService.getSongIdList(singer_id, page, pageSize);
+    }
+    @GetMapping("/isExist")
+    public Integer isExist(@RequestParam("singer_id") Integer singer_id) {
+        return singerDataService.isExist(singer_id);
+    }
+    @GetMapping("/deleteSingersSongRelation")
+    public void  deleteSingersSongRelation(@RequestParam("songIds") List<Long> songIds) {
+        singerDataService.deleteSingers(songIds);
+    }
+    @GetMapping("/addSSRelation")
+    public void addSSRelation(@RequestBody SongAddVO vo) {
+        singerDataService.addSSRelation(vo);
     }
 
 

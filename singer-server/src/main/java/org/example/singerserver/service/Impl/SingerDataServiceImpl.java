@@ -6,6 +6,7 @@ import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.SingerDataList;
 import org.example.commoncore.entity.vo.request.SingerAddVO;
+import org.example.commoncore.entity.vo.request.SongAddVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.singerserver.mapper.SingerDataMapper;
 import org.example.singerserver.service.SingerDataService;
@@ -167,6 +168,31 @@ public class SingerDataServiceImpl extends ServiceImpl<SingerDataMapper, SingerD
     @Override
     public ResponseEntity<org.springframework.core.io.Resource> getFile(int singer_id) {
         return getResourceResponseEntity(indexSingerDataMapper.getSingerPath(singer_id));
+    }
+
+    @Override
+    public Integer getSongSum(int singer_id) {
+        return indexSingerDataMapper.getSongsSum(singer_id);
+    }
+
+    @Override
+    public List<Integer> getSongIdList(int singerId, int page, int pageSize) {
+        return indexSingerDataMapper.getSongIdList(singerId, page, pageSize);
+    }
+
+    @Override
+    public Integer isExist(Integer singer_id) {
+        return indexSingerDataMapper.isExist(singer_id);
+    }
+
+    @Override
+    public void deleteSingers(List<Long> songIds) {
+        indexSingerDataMapper.deleteSingerSongRelation(songIds);
+    }
+
+    @Override
+    public void addSSRelation(SongAddVO vo) {
+        indexSingerDataMapper.addSSRelation(vo);
     }
 
 

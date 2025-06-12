@@ -3,9 +3,13 @@ package org.example.songserver.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.SongDataList;
+import org.example.commoncore.entity.vo.request.SongAddVO;
+import org.example.commoncore.entity.vo.response.TableListVO;
+import org.example.songserver.feign.SingerServiceClient;
 import org.example.songserver.mapper.SongDataMapper;
 import org.example.songserver.service.SongDataService;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +25,11 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataList> implements SongDataService {
 
-    @Resource
-    private SongDataMapper songDataMapper;
+    private final SongDataMapper songDataMapper;
+    private final SingerServiceClient singerServiceClient;
 
 
     @Override
@@ -157,6 +162,86 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
             e.printStackTrace(); // 可以打印错误日志帮助调试
             return "保存失败";
         }
+    }
+
+    // 歌手
+    @Override
+    public TableListVO getSongTableList(int singer_id, int page, int pageSize) {
+        if (page<1 || pageSize<1) {
+            throw new IllegalArgumentException("请求参数（page,pageSize）不能为小于1的数");
+        }
+        page =(page-1)*pageSize;
+        int count=singerServiceClient.getSongSum(singer_id);
+        List<Integer> idList = singerServiceClient.getSongIdList(singer_id, page, pageSize);
+        SongDataList[] songDataLists=songDataMapper.getSongDataList(idList);
+        TableListVO vo=new TableListVO();
+        vo.setCount(count);
+        vo.setSongDataList(songDataLists);
+        return vo;
+    }
+
+    @Override
+    public String getSongTableListVerify(int singer_id, int page, int pageSize) {
+        if (page<1 || pageSize<1)  return "请求参数（page,pageSize）不能为小于1的数";
+        if (singerServiceClient.isExist(singer_id)!=1) return "请求歌手不存在";
+        return null;
+    }
+
+    //搜索
+    @Override
+    public <T> TableListVO getSearchSongTableList(int singer_id, T searchText, int page, int pageSize) {
+        if (page<1 || pageSize<1) {
+            throw new IllegalArgumentException("请求参数（page,pageSize）不能为小于1的数");
+        }
+        page =(page-1)*pageSize;
+        String keyName=String.valueOf(searchText);
+        List<Integer> idList = singerServiceClient.getSongIdList(singer_id, page, pageSize);
+        int count=songDataMapper.getSearchSongCount(idList,keyName);
+        SongDataList[] songDataLists=songDataMapper.getSongDataByKeyName(idList,keyName,page,pageSize);
+        TableListVO vo=new TableListVO();
+        vo.setCount(count);
+        vo.setSongDataList(songDataLists);
+        return vo;
+    }
+
+    @Override
+    public TableListVO getSongDataList(int singer_id, int song_id) {
+        SongDataList songDataList=songDataMapper.getSongDataOne(song_id);
+        TableListVO vo=new TableListVO();
+        vo.setSongDataOne(songDataList);
+        return vo;
+    }
+
+    //删除
+    @Override
+    public String deleteSongTableList(List<Long> songIds) {
+        songDataMapper.deleteSongs(songIds);
+        return null;
+    }
+
+    @Override
+    public String addSong(SongAddVO vo) {
+        if (vo==null) return "请输入正确参数";
+        if (vo.getSinger_id()==0) return "请传入歌手id";
+        if (singerServiceClient.isExist(vo.getSinger_id())!=1) return "请求歌手不存在";
+        if (vo.getTitle()==null || vo.getTitle().isEmpty()) return "请传入歌曲名";
+        if (vo.getRelease_date()==null || vo.getRelease_date().isEmpty()) vo.setRelease_date(null);
+        if (vo.getRelease_date()!=null) {
+            try {
+                Date.valueOf(vo.getRelease_date());// 将字符串转换为java.sql.Date
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
+                return "请求的发行日期格式有误";
+            }
+        }
+        try {
+            songDataMapper.addSong(vo);
+        }catch (Exception e){
+            return "歌曲名不重复";
+        }
+        vo.setSong_id(songDataMapper.getSongId(vo.getTitle()));
+        singerServiceClient.addSSRelation(vo);
+        return null;
     }
 
 }
