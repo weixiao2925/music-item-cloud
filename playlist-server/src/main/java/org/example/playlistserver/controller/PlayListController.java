@@ -41,12 +41,12 @@ public class PlayListController {
     public Integer isExistPlaylistSong(@RequestParam("songId") Integer songId) {
         return playListDataService.isExistPlaylistSong(songId);
     }
-    @GetMapping("/addPlaylistSongRelation")
-    public void addPlaylistSongRelation(SongAdd_PVO vo){
+    @PostMapping("/addPlaylistSongRelation")
+    public void addPlaylistSongRelation(@RequestBody SongAdd_PVO vo){
         playListDataService.addPlaylistSongRelation(vo);
     }
-    @GetMapping("/deleteSingerSongRelation")
-    public void deleteSingerSongRelation(List<Long> songIds){
+    @PostMapping("/deleteSingerSongRelation")
+    public void deleteSingerSongRelation(@RequestBody List<Long> songIds){
         playListDataService.deleteSingerSongRelation(songIds);
     }
 

@@ -51,11 +51,11 @@ public class SingerController {
     public Integer isExist(@RequestParam("singer_id") Integer singer_id) {
         return singerDataService.isExist(singer_id);
     }
-    @GetMapping("/deleteSingersSongRelation")
-    public void  deleteSingersSongRelation(@RequestParam("songIds") List<Long> songIds) {
+    @PostMapping("/deleteSingersSongRelation")
+    public void  deleteSingersSongRelation(@RequestBody List<Long> songIds) {
         singerDataService.deleteSingers(songIds);
     }
-    @GetMapping("/addSSRelation")
+    @PostMapping("/addSSRelation")
     public void addSSRelation(@RequestBody SongAddVO vo) {
         singerDataService.addSSRelation(vo);
     }

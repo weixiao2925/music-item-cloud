@@ -24,8 +24,8 @@ public class UserController {
     private final UserDataService userDataService;
 
 
-    @GetMapping("/deleteUserSongRelation")
-    public void deleteUserSongRelation(@RequestParam List<Long> songIds) {
+    @PostMapping("/deleteUserSongRelation")
+    public void deleteUserSongRelation(@RequestBody List<Long> songIds) {
         userDataService.deleteSingerSongRelation(songIds);
     }
 

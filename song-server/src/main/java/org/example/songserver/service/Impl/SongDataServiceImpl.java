@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static org.example.songserver.utils.GetAvatar.getResourceResponseEntity;
+
 
 @Service
 @RequiredArgsConstructor
@@ -104,7 +106,7 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
 
     @Override
     public ResponseEntity<org.springframework.core.io.Resource> getFile(int song_id) {
-        return null;
+        return getResourceResponseEntity(songDataMapper.getSongPath(song_id));
     }
 
     //上传mp3文件
