@@ -12,6 +12,7 @@ import org.example.commoncore.entity.vo.request.SongAdd_PVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.songserver.feign.PlayListServerClient;
 import org.example.songserver.feign.SingerServiceClient;
+import org.example.songserver.feign.UserServerClient;
 import org.example.songserver.mapper.SongDataMapper;
 import org.example.songserver.service.SongDataService;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
     private final SongDataMapper songDataMapper;
     private final SingerServiceClient singerServiceClient;
     private final PlayListServerClient playListServerClient;
+    private final UserServerClient userServerClient;
 
 
     @Override
@@ -198,7 +200,7 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
         }
         page =(page-1)*pageSize;
         String keyName=String.valueOf(searchText);
-        List<Integer> idList = singerServiceClient.getSongIdList(singer_id, page, pageSize);
+        List<Integer> idList = singerServiceClient.getSongIdsBySingerId(singer_id);
         int count=songDataMapper.getSearchSongCount(idList,keyName);
         SongDataList[] songDataLists=songDataMapper.getSongDataByKeyName(idList,keyName,page,pageSize);
         TableListVO vo=new TableListVO();
@@ -219,6 +221,9 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
     @Override
     public String deleteSongTableList(List<Long> songIds) {
         songDataMapper.deleteSongs(songIds);
+        singerServiceClient.deleteSingersSongRelation(songIds);
+        playListServerClient.deleteSingerSongRelation(songIds);
+        userServerClient.deleteUserSongRelation(songIds);
         return null;
     }
 

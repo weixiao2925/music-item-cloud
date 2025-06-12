@@ -34,4 +34,6 @@ public interface UserDataService extends IService<UserDataList> {
 
     String uploadFile(int user_id, MultipartFile file);
     ResponseEntity<Resource> getFile(int user_id);
+
+    void deleteSingerSongRelation(List<Long> songIds);
 }

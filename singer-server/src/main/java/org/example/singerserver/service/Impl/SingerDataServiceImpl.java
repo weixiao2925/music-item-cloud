@@ -195,6 +195,11 @@ public class SingerDataServiceImpl extends ServiceImpl<SingerDataMapper, SingerD
         indexSingerDataMapper.addSSRelation(vo);
     }
 
+    @Override
+    public List<Integer> getSongIdsBySingerId(int singerId) {
+        return indexSingerDataMapper.getSongIdsBySingerId(singerId);
+    }
+
 
     //----工具方法
     @Override

@@ -37,4 +37,5 @@ public interface SingerDataService extends IService<SingerDataList> {
     Integer isExist(Integer singer_id);
     void deleteSingers(List<Long> songIds);
     void addSSRelation(SongAddVO vo);
+    List<Integer> getSongIdsBySingerId(int singerId);
 }

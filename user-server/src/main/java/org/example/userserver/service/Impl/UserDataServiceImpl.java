@@ -167,6 +167,11 @@ public class UserDataServiceImpl extends ServiceImpl<IndexUserDataMapper, UserDa
         return getResourceResponseEntity(indexUserDataMapper.getUserPath(user_id));
     }
 
+    @Override
+    public void deleteSingerSongRelation(List<Long> songIds) {
+        indexUserDataMapper.deleteUserSongRelation(songIds);
+    }
+
     //----工具方法
     //验证页数是否合法
     public String getUserTableListVerify(int page, int pageSize){

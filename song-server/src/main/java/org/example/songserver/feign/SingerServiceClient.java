@@ -16,4 +16,8 @@ public interface SingerServiceClient {
     Integer isExist(Integer singer_id);
     @GetMapping("/api/singer/addSSRelation")
     void addSSRelation(SongAddVO vo);
+    @GetMapping("/api/singer/getSongIdsBySingerId")
+    List<Integer> getSongIdsBySingerId(int singer_id);
+    @GetMapping("/api/singer/deleteSingersSongRelation")
+    void deleteSingersSongRelation(List<Long> songIds);
 }

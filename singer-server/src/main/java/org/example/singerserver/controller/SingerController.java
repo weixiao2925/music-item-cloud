@@ -59,6 +59,10 @@ public class SingerController {
     public void addSSRelation(@RequestBody SongAddVO vo) {
         singerDataService.addSSRelation(vo);
     }
+    @GetMapping("/getSongIdsBySingerId")
+    public List<Integer> getSongIdsBySingerId(@RequestParam("singer_id") int singer_id) {
+        return singerDataService.getSongIdsBySingerId(singer_id);
+    }
 
 
     @ResponseBody

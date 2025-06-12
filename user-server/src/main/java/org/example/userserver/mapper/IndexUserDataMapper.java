@@ -81,4 +81,12 @@ public interface IndexUserDataMapper extends BaseMapper<UserDataList> {
     @Select("select avatar_path from users where user_id=#{user_id}")
     String getUserPath(int user_id);
 
+    @Delete("<script>" +
+            "delete from user_song_relation where song_id in " +
+            "<foreach item='songId' collection='songIds' open='(' separator=',' close=')'>" +
+            "#{songId}" +
+            "</foreach>" +
+            "</script>")
+    void deleteUserSongRelation(@Param("songIds") List<Long> songIds);
+
 }

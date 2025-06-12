@@ -23,6 +23,13 @@ public class UserController {
 
     private final UserDataService userDataService;
 
+
+    @GetMapping("/deleteUserSongRelation")
+    public void deleteUserSongRelation(@RequestParam List<Long> songIds) {
+        userDataService.deleteSingerSongRelation(songIds);
+    }
+
+
     @GetMapping("/getUserSum")
     public Integer getUserSum() {
         return userDataService.getUserSum();
