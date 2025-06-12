@@ -102,7 +102,7 @@ public interface SongDataMapper extends BaseMapper<SongDataList> {
             "</foreach>",
             "</script>"
     })
-    List<SongDataList> getSongDataListP(@Param("list") List<Integer> ids);
+    SongDataList[] getSongDataListP(@Param("list") List<Integer> ids);
     //获取单个歌单信息
     @Select("""
         SELECT * FROM songs WHERE song_id = #{song_id}
@@ -120,7 +120,7 @@ public interface SongDataMapper extends BaseMapper<SongDataList> {
             "LIMIT #{page}, #{pageSize}",
             "</script>"
     })
-    List<SongDataList> getSongDataByKeyNameP(@Param("songIds") List<Integer> songIds,
+    SongDataList[] getSongDataByKeyNameP(@Param("songIds") List<Integer> songIds,
                                             @Param("keyName") String keyName,
                                             @Param("page") int page,
                                             @Param("pageSize") int pageSize);

@@ -1,5 +1,7 @@
 package org.example.playlistserver.service;
 
+import org.apache.ibatis.annotations.Param;
+import org.example.commoncore.entity.vo.request.SongAdd_PVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -19,4 +21,12 @@ public interface PlayListDataService {
     TableListVO getPlayDataList(int playlist_id);
     String uploadFile(int playlist_id, MultipartFile file);
     ResponseEntity<Resource> getFile(int playlist_id);
+
+    Integer getSongsSumP(int playlist_id);
+    List<Integer> getSongIdList(int playlist_id, int page, int pageSize);
+    Integer isExistPlaylist(int playlist_id);
+    List<Integer> getSongDataByKeyNameP(int playlist_id);
+    Integer isExistPlaylistSong(Integer songId);
+    void addPlaylistSongRelation(SongAdd_PVO vo);
+    void deleteSingerSongRelation(List<Long> songIds);
 }

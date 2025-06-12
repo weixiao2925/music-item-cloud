@@ -3,6 +3,7 @@ package org.example.playlistserver.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commoncore.entity.RestBean;
+import org.example.commoncore.entity.vo.request.SongAdd_PVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.playlistserver.service.PlayListDataService;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,39 @@ import java.util.List;
 public class PlayListController {
 
     private final PlayListDataService playListDataService;
+
+    // 整合song
+    @GetMapping("/getSongsSumP")
+    public Integer getSongsSumP(@RequestParam("playlist_id") int playlist_id) {
+        return playListDataService.getSongsSumP(playlist_id);
+    }
+    @GetMapping("/getSongIdList")
+    public List<Integer> getSongIdList(@RequestParam("playlist_id") int playlist_id, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+        return playListDataService.getSongIdList(playlist_id, page, pageSize);
+    }
+    @GetMapping("/isExistPlaylist")
+    public Integer isExistPlaylist(@RequestParam("playlist_id") int playlist_id) {
+        return playListDataService.isExistPlaylist(playlist_id);
+    }
+    @GetMapping("/getSongDataByKeyNameP")
+    public List<Integer> getSongDataByKeyNameP(@RequestParam("playlist_id") int playlist_id) {
+        return playListDataService.getSongDataByKeyNameP(playlist_id);
+    }
+    @GetMapping("/isExistPlaylistSong")
+    public Integer isExistPlaylistSong(@RequestParam("songId") Integer songId) {
+        return playListDataService.isExistPlaylistSong(songId);
+    }
+    @GetMapping("/addPlaylistSongRelation")
+    public void addPlaylistSongRelation(SongAdd_PVO vo){
+        playListDataService.addPlaylistSongRelation(vo);
+    }
+    @GetMapping("/deleteSingerSongRelation")
+    public void deleteSingerSongRelation(List<Long> songIds){
+        playListDataService.deleteSingerSongRelation(songIds);
+    }
+
+
+
 
     @GetMapping("/getPlaylistSum")
     public Integer getPlaylistSum() {

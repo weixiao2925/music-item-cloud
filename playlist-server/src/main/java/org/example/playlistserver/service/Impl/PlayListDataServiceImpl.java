@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.dto.PlayListDataList;
+import org.example.commoncore.entity.vo.request.SongAdd_PVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
 import org.example.playlistserver.mapper.PlayListDataMapper;
 import org.example.playlistserver.service.PlayListDataService;
@@ -122,6 +123,40 @@ public class PlayListDataServiceImpl extends ServiceImpl<PlayListDataMapper, Pla
         return getResourceResponseEntity(indexPlayListDataMapper.getPlaylistPath(playlist_id));
     }
 
+    @Override
+    public Integer getSongsSumP(int playlist_id) {
+        return indexPlayListDataMapper.getSongsSumP(playlist_id);
+    }
+
+    @Override
+    public List<Integer> getSongIdList(int playlist_id, int page, int pageSize) {
+        return indexPlayListDataMapper.getSongIdList(playlist_id,page,pageSize);
+    }
+
+    @Override
+    public Integer isExistPlaylist(int playlist_id) {
+        return indexPlayListDataMapper.isExistPlaylist(playlist_id);
+    }
+
+    @Override
+    public List<Integer> getSongDataByKeyNameP(int playlist_id) {
+        return indexPlayListDataMapper.getSongDataByKeyNameP(playlist_id);
+    }
+
+    @Override
+    public Integer isExistPlaylistSong(Integer songId) {
+        return indexPlayListDataMapper.isExistPlaylistSong(songId);
+    }
+
+    @Override
+    public void addPlaylistSongRelation(SongAdd_PVO vo) {
+        indexPlayListDataMapper.addPlaylistSongRelation(vo);
+    }
+
+    @Override
+    public void deleteSingerSongRelation(List<Long> songIds) {
+        indexPlayListDataMapper.deletePlaylistSongRelation(songIds);
+    }
 
 
     //工具方法

@@ -8,7 +8,9 @@ import org.example.commoncore.constants.Const;
 import org.example.commoncore.entity.dto.HomeDataList;
 import org.example.commoncore.entity.dto.SongDataList;
 import org.example.commoncore.entity.vo.request.SongAddVO;
+import org.example.commoncore.entity.vo.request.SongAdd_PVO;
 import org.example.commoncore.entity.vo.response.TableListVO;
+import org.example.songserver.feign.PlayListServerClient;
 import org.example.songserver.feign.SingerServiceClient;
 import org.example.songserver.mapper.SongDataMapper;
 import org.example.songserver.service.SongDataService;
@@ -30,6 +32,7 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
 
     private final SongDataMapper songDataMapper;
     private final SingerServiceClient singerServiceClient;
+    private final PlayListServerClient playListServerClient;
 
 
     @Override
@@ -241,6 +244,75 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
         }
         vo.setSong_id(songDataMapper.getSongId(vo.getTitle()));
         singerServiceClient.addSSRelation(vo);
+        return null;
+    }
+
+    @Override
+    public TableListVO getSongTableList_P(int playlist_id, int page, int pageSize) {
+        if (page<1 || pageSize<1) {
+            throw new IllegalArgumentException("请求参数（page,pageSize）不能为小于1的数");
+        }
+        page =(page-1)*pageSize;
+        int count=playListServerClient.getSongsSumP(playlist_id);
+        List<Integer> idList = playListServerClient.getSongIdList(playlist_id, page, pageSize);
+        SongDataList[] songDataLists=songDataMapper.getSongDataListP(idList);
+        TableListVO vo=new TableListVO();
+        vo.setCount(count);
+        vo.setSongDataList(songDataLists);
+        return vo;
+    }
+
+    @Override
+    public String getSongTableListVerify_P(int playlist_id, int page, int pageSize) {
+        if (page<1 || pageSize<1)  return "请求参数（page,pageSize）不能为小于1的数";
+        if (playListServerClient.isExistPlaylist(playlist_id)!=1) return "请求歌单不存在";
+        return null;
+    }
+
+    @Override
+    public <T> TableListVO getSearchSongTableList_P(int playlist_id, T searchText, int page, int pageSize) {
+        if (page<1 || pageSize<1) {
+            throw new IllegalArgumentException("请求参数（page,pageSize）不能为小于1的数");
+        }
+        page =(page-1)*pageSize;
+        String keyName=String.valueOf(searchText);
+        List<Integer> listId = playListServerClient.getSongDataByKeyNameP(playlist_id);
+        int count=songDataMapper.getSearchSongCountP(listId,keyName);
+        SongDataList[] songDataLists=songDataMapper.getSongDataByKeyNameP(listId,keyName,page,pageSize);
+        TableListVO vo=new TableListVO();
+        vo.setCount(count);
+        vo.setSongDataList(songDataLists);
+        return vo;
+    }
+
+    @Override
+    public TableListVO getSongDataList_P(int playlist_id, int song_id) {
+        SongDataList songDataList=songDataMapper.getSongDataOne_P(song_id);
+        TableListVO vo=new TableListVO();
+        vo.setSongDataOne(songDataList);
+        return vo;
+    }
+
+    @Override
+    public String addSong_P(SongAdd_PVO vo) {
+        if (vo==null) return "请输入正确参数";
+        if (vo.getPlaylist_id()==0) return "请传入歌单id";
+        if (playListServerClient.isExistPlaylist(vo.getPlaylist_id())!=1) return "请求歌单不存在";
+        if (vo.getTitle()==null || vo.getTitle().isEmpty()) return "请传入歌曲名";
+        try {
+            vo.setSong_id(songDataMapper.getSongId(vo.getTitle()));
+        }catch (Exception e){
+            return "歌曲不存在";
+        }
+        Integer songIdByTitle = songDataMapper.getSongIdByTitle(vo.getTitle());
+        if (playListServerClient.isExistPlaylistSong(songIdByTitle)==1) return "请求歌曲已存在";
+        playListServerClient.addPlaylistSongRelation(vo);
+        return null;
+    }
+    //删除
+    @Override
+    public String deleteSongTableList_P(List<Long> songIds) {
+        playListServerClient.deleteSingerSongRelation(songIds);
         return null;
     }
 
