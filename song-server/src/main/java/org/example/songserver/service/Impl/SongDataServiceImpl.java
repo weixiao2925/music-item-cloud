@@ -179,7 +179,10 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
         }
         page =(page-1)*pageSize;
         int count=singerServiceClient.getSongSum(singer_id);
+        if (count==0) return new TableListVO();
+//        System.out.println(count);
         List<Integer> idList = singerServiceClient.getSongIdList(singer_id, page, pageSize);
+        if (idList==null) return new TableListVO();
         SongDataList[] songDataLists=songDataMapper.getSongDataList(idList);
         TableListVO vo=new TableListVO();
         vo.setCount(count);
@@ -203,7 +206,9 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
         page =(page-1)*pageSize;
         String keyName=String.valueOf(searchText);
         List<Integer> idList = singerServiceClient.getSongIdsBySingerId(singer_id);
+        if (idList==null) return new TableListVO();
         int count=songDataMapper.getSearchSongCount(idList,keyName);
+        if (count==0) return new TableListVO();
         SongDataList[] songDataLists=songDataMapper.getSongDataByKeyName(idList,keyName,page,pageSize);
         TableListVO vo=new TableListVO();
         vo.setCount(count);
@@ -261,7 +266,9 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
         }
         page =(page-1)*pageSize;
         int count=playListServerClient.getSongsSumP(playlist_id);
+        if (count==0) return new TableListVO();
         List<Integer> idList = playListServerClient.getSongIdList(playlist_id, page, pageSize);
+        if (idList==null) return new TableListVO();
         SongDataList[] songDataLists=songDataMapper.getSongDataListP(idList);
         TableListVO vo=new TableListVO();
         vo.setCount(count);
@@ -285,6 +292,7 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
         String keyName=String.valueOf(searchText);
         List<Integer> listId = playListServerClient.getSongDataByKeyNameP(playlist_id);
         int count=songDataMapper.getSearchSongCountP(listId,keyName);
+        if (count==0) return new TableListVO();
         SongDataList[] songDataLists=songDataMapper.getSongDataByKeyNameP(listId,keyName,page,pageSize);
         TableListVO vo=new TableListVO();
         vo.setCount(count);

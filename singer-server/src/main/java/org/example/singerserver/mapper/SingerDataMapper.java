@@ -84,7 +84,7 @@ public interface SingerDataMapper extends BaseMapper<SingerDataList> {
     List<Integer> getSongIdsBySingerId(@Param("singerId") int singerId);
     //----添加数据(先添加到数据库，然后再从数据库根据title获取id传入addSSRelation)
     @Insert("insert into singer_song_relation (singer_id, song_id) values (#{singer_id},#{song_id})")
-    void addSSRelation(SongAddVO vo);
+    void addSSRelation(@Param("singer_id") int singer_id, @Param("song_id") int song_id);
 
     //歌单版删除（只删除歌曲与歌单的关系）
     @Delete("<script>" +

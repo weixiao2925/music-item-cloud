@@ -44,7 +44,7 @@ public interface IndexUserDataMapper extends BaseMapper<UserDataList> {
     Integer isExist(@Param("user_id") Integer user_id);
     //----搜索功能
     @Select("select user_id as id,name, sex, username as email, birth_date, signature, region, avatar_path,registration_time " +
-            "from users where (users.role='root' or users.role='supperRoot') AND (name like CONCAT('%', #{keyName}, '%') or users.username like concat('%' , #{keyName} , '%')) " +
+            "from users where (name like CONCAT('%', #{keyName}, '%') or users.username like concat('%' , #{keyName} , '%')) " +
             "limit #{page},#{pageSize}")
     UserDataList[] getUserDataByKeyName(String keyName, int page, int pageSize);
     //搜索出来的数据总数

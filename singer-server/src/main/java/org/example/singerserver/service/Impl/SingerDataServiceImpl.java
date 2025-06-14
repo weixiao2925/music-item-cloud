@@ -91,11 +91,11 @@ public class SingerDataServiceImpl extends ServiceImpl<SingerDataMapper, SingerD
                 return "请求的生日格式有误";
             }
         }
-        try{
+//        try{
             indexSingerDataMapper.insertSinger(vo);
-        }catch (Exception e){
-            return "不能重复歌手";
-        }
+//        }catch (Exception e){
+//            return "不能重复歌手";
+//        }
         return null;
     }
     //----修改
@@ -192,7 +192,7 @@ public class SingerDataServiceImpl extends ServiceImpl<SingerDataMapper, SingerD
 
     @Override
     public void addSSRelation(SongAddVO vo) {
-        indexSingerDataMapper.addSSRelation(vo);
+        indexSingerDataMapper.addSSRelation(vo.getSinger_id(), vo.getSong_id());
     }
 
     @Override
