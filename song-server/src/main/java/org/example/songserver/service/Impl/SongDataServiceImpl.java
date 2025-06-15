@@ -238,6 +238,7 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
     }
 
     @Override
+    @GlobalTransactional(name = "add-song-tx", rollbackFor = Exception.class)
     public String addSong(SongAddVO vo) {
         if (vo==null) return "请输入正确参数";
         if (vo.getSinger_id()==0) return "请传入歌手id";
@@ -312,6 +313,7 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
     }
 
     @Override
+    @GlobalTransactional(name = "add-playlist-song-tx", rollbackFor = Exception.class)
     public String addSong_P(SongAdd_PVO vo) {
         if (vo==null) return "请输入正确参数";
         if (vo.getPlaylist_id()==0) return "请传入歌单id";

@@ -150,6 +150,7 @@ public class PlayListDataServiceImpl extends ServiceImpl<PlayListDataMapper, Pla
     }
 
     @Override
+    @Transactional
     public void addPlaylistSongRelation(SongAdd_PVO vo) {
         indexPlayListDataMapper.addPlaylistSongRelation(vo);
     }

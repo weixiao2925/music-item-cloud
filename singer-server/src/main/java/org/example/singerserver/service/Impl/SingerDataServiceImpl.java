@@ -194,6 +194,7 @@ public class SingerDataServiceImpl extends ServiceImpl<SingerDataMapper, SingerD
     }
 
     @Override
+    @Transactional
     public void addSSRelation(SongAddVO vo) {
         indexSingerDataMapper.addSSRelation(vo.getSinger_id(), vo.getSong_id());
     }
