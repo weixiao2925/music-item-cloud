@@ -10,6 +10,7 @@ import org.example.playlistserver.mapper.PlayListDataMapper;
 import org.example.playlistserver.service.PlayListDataService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -154,6 +155,7 @@ public class PlayListDataServiceImpl extends ServiceImpl<PlayListDataMapper, Pla
     }
 
     @Override
+    @Transactional
     public void deleteSingerSongRelation(List<Long> songIds) {
         indexPlayListDataMapper.deletePlaylistSongRelation(songIds);
     }

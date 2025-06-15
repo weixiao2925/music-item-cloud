@@ -12,6 +12,7 @@ import org.example.userserver.mapper.IndexUserDataMapper;
 import org.example.userserver.service.UserDataService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -168,6 +169,7 @@ public class UserDataServiceImpl extends ServiceImpl<IndexUserDataMapper, UserDa
     }
 
     @Override
+    @Transactional
     public void deleteSingerSongRelation(List<Long> songIds) {
         indexUserDataMapper.deleteUserSongRelation(songIds);
     }

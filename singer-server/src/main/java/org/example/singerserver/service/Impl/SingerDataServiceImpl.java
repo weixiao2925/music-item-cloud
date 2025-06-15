@@ -12,6 +12,7 @@ import org.example.singerserver.mapper.SingerDataMapper;
 import org.example.singerserver.service.SingerDataService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -186,8 +187,10 @@ public class SingerDataServiceImpl extends ServiceImpl<SingerDataMapper, SingerD
     }
 
     @Override
+    @Transactional
     public void deleteSingers(List<Long> songIds) {
         indexSingerDataMapper.deleteSingerSongRelation(songIds);
+//        throw new RuntimeException("模拟异常，回滚事务");
     }
 
     @Override

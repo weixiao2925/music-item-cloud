@@ -2,6 +2,7 @@ package org.example.songserver.service.Impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import io.seata.spring.annotation.GlobalTransactional;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.example.commoncore.constants.Const;
@@ -226,11 +227,13 @@ public class SongDataServiceImpl extends ServiceImpl<SongDataMapper, SongDataLis
 
     //删除
     @Override
+    @GlobalTransactional(name = "delete-songs-tx", rollbackFor = Exception.class)
     public String deleteSongTableList(List<Long> songIds) {
         songDataMapper.deleteSongs(songIds);
         singerServiceClient.deleteSingersSongRelation(songIds);
         playListServerClient.deleteSingerSongRelation(songIds);
         userServerClient.deleteUserSongRelation(songIds);
+//        throw new RuntimeException("模拟异常，回滚事务");
         return null;
     }
 
