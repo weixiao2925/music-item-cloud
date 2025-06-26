@@ -79,7 +79,7 @@ public class UserController {
     @GetMapping("/changePersonalOne")
     public RestBean<Void> changePersonalOne(@RequestParam @Email String username,
                                             @RequestParam String name,
-                                            @RequestParam String sex,
+                                             @RequestParam String sex,
                                             @RequestParam(required = false) String birthDateString,
                                             @RequestParam String region,
                                             @RequestParam String signature) {
